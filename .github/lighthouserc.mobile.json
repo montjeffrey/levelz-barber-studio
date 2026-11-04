@@ -4,8 +4,7 @@
       "staticDistDir": ".",
       "numberOfRuns": 1,
       "settings": {
-        "chromeFlags": "--no-sandbox",
-        "preset": "mobile"
+        "chromeFlags": "--no-sandbox"
       }
     },
     "assert": {
