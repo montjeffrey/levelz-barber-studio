@@ -48,7 +48,7 @@
 
 # Security headers for every page.
 # The CSP is report-only for now: it lists what the pages load today (Google Tag
-# Manager/Analytics, the Booksy widget, the Google Maps embed, Google Fonts) and
+# Manager/Analytics, the Booksy widget, the Google Maps embed) and
 # 'unsafe-inline' is allowed because the pages use inline gtag/Booksy config
 # scripts and style attributes. Check the browser console on a deploy preview for
 # violations (the Booksy dialog may need more origins), then enforce it.
@@ -60,4 +60,11 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Strict-Transport-Security = "max-age=31536000"
-    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://booksy.com https://*.booksy.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://booksy.com https://*.booksy.com; frame-src https://www.google.com https://booksy.com https://*.booksy.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://booksy.com https://*.booksy.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://booksy.com https://*.booksy.com; frame-src https://www.google.com https://booksy.com https://*.booksy.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+
+# The font is a fixed file, so browsers may keep it for a year. If the font is
+# ever replaced, give the new file a new name.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
