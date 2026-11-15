@@ -3,30 +3,49 @@
   command = "npm run build"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
   SECRETS_SCAN_OMIT_KEYS = "GOOGLE_ANALYTICS_ID"
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
 
-# Build script to replace environment variables
-[build.processing]
-  skip_processing = false
+# The site is published from the repo root, so keep repo/build files off the web.
+[[redirects]]
+  from = "/build.js"
+  to = "/404.html"
+  status = 404
+  force = true
 
-[build.processing.html]
-  pretty_urls = true
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
 
-[build.processing.css]
-  bundle = true
-  minify = true
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/404.html"
+  status = 404
+  force = true
 
-[build.processing.js]
-  bundle = true
-  minify = true
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
 
-# Environment variable substitution
-[build.processing.images]
-  compress = true 
+[[redirects]]
+  from = "/LICENSE"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.github/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 # Security headers for every page.
 # The CSP is report-only for now: it lists what the pages load today (Google Tag
 # Manager/Analytics, the Booksy widget, the Google Maps embed, Google Fonts) and
