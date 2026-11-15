@@ -146,9 +146,26 @@ if (contactForm) {
             return;
         }
         
-        // In a real implementation, you would send this data to a server
-        alert('Thank you for your message! We will get back to you soon.');
-        contactForm.reset();
+        // Submit to Netlify Forms (detected at deploy time from contact.html)
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error('Form submission failed: ' + response.status);
+                alert('Thank you for your message! We will get back to you soon.');
+                contactForm.reset();
+            })
+            .catch(() => {
+                alert('Sorry, your message could not be sent. Please call us at 973-577-2002 instead.');
+            })
+            .finally(() => {
+                if (submitBtn) submitBtn.disabled = false;
+            });
     });
 }
 
