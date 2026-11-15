@@ -1,3 +1,14 @@
+/* Montserrat is served from this site (fonts/, SIL Open Font License in
+   fonts/OFL.txt). One variable file covers the weights the pages used to
+   load from Google Fonts. */
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url('fonts/montserrat-latin.woff2') format('woff2');
+}
+
 /* Reset and Base Styles */
 :root {
     --accent-color: #00bfff; /* vibrant blue from neon sign */

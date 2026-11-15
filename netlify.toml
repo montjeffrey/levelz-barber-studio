@@ -3,27 +3,68 @@
   command = "npm run build"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
   SECRETS_SCAN_OMIT_KEYS = "GOOGLE_ANALYTICS_ID"
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
 
-# Build script to replace environment variables
-[build.processing]
-  skip_processing = false
+# The site is published from the repo root, so keep repo/build files off the web.
+[[redirects]]
+  from = "/build.js"
+  to = "/404.html"
+  status = 404
+  force = true
 
-[build.processing.html]
-  pretty_urls = true
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
 
-[build.processing.css]
-  bundle = true
-  minify = true
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/404.html"
+  status = 404
+  force = true
 
-[build.processing.js]
-  bundle = true
-  minify = true
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
 
-# Environment variable substitution
-[build.processing.images]
-  compress = true 
+[[redirects]]
+  from = "/LICENSE"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.github/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# Security headers for every page.
+# The CSP is report-only for now: it lists what the pages load today (Google Tag
+# Manager/Analytics, the Booksy widget, the Google Maps embed) and
+# 'unsafe-inline' is allowed because the pages use inline gtag/Booksy config
+# scripts and style attributes. Check the browser console on a deploy preview for
+# violations (the Booksy dialog may need more origins), then enforce it.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000"
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://booksy.com https://*.booksy.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://booksy.com https://*.booksy.com; frame-src https://www.google.com https://booksy.com https://*.booksy.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+
+# The font is a fixed file, so browsers may keep it for a year. If the font is
+# ever replaced, give the new file a new name.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
